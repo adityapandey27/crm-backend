@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const response = require('./utils/response');
-const errorHandler = require('./middleware/error.middleware');
+const response = require('./src/utils/response');
+const errorHandler = require('./src/middleware/error.middleware');
 
-const authRoutes = require('./routes/auth.routes');
-const leadRoutes = require('./routes/lead.routes');
-const appointmentRoutes = require('./routes/appointment.routes');
-const emailTemplateRoutes = require('./routes/emailTemplate.routes');
-const reportRoutes = require('./routes/report.routes');
+const authRoutes = require('./src/routes/auth.routes');
+const leadRoutes = require('./src/routes/lead.routes');
+const appointmentRoutes = require('./src/routes/appointment.routes');
+const emailTemplateRoutes = require('./src/routes/emailTemplate.routes');
+const reportRoutes = require('./src/routes/report.routes');
 
 const app = express();
 
