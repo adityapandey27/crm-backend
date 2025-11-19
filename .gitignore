@@ -1,0 +1,9 @@
+
+# Coverage directory used by testing tools
+coverage
+
+# Dependency directories
+/node_modules
+node-modules
+node modules
+
