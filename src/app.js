@@ -16,6 +16,15 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN === '*' 
+      ? ['http://localhost:3000', 'https://www.fitfinitytrainer.com/']
+      : process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
+
 // attach a helper for consistent responses
 app.use((req, res, next) => {
   res.success = (message, data = {}) => response.success(res, message, data);
