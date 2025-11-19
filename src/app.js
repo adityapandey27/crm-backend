@@ -12,18 +12,21 @@ const reportRoutes = require('./routes/report.routes');
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN === '*' 
-      ? ['http://localhost:3000', 'https://www.fitfinitytrainer.com/']
-      : process.env.CORS_ORIGIN,
-    credentials: true,
-  })
-);
+
+app.get("/", function (_, res) {
+  res.statusCode = 200;
+  res.json({ status: "success", message: "Parcel Pending API", data: {} });
+});
+
 
 // attach a helper for consistent responses
 app.use((req, res, next) => {
@@ -31,6 +34,7 @@ app.use((req, res, next) => {
   res.error = (message, status = 400, data = {}) => response.error(res, message, status, data);
   next();
 });
+
 
 // routes
 app.use('/api/auth', authRoutes);
