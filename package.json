@@ -2,11 +2,12 @@
   "name": "crm-backend",
   "version": "1.0.0",
   "description": "CRM backend for college project - Node + Express + MongoDB",
-  "main": "src/server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "lint": "eslint ."
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+     "lint": "eslint ."
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
