@@ -65,7 +65,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/email-templates", emailTemplateRoutes);
-app.use("/api/reports", reportRoutes);
+app.use("/api/report", reportRoutes);
 
 // health
 app.get("/api/health", (req, res) => res.success("ok", { time: new Date() }));
