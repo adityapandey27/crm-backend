@@ -3,21 +3,80 @@ const LeadModel = require('../models/lead.model');
 const automationLog = require('../models/automationLog.model');
 const emailService = require('./email.service');
 
+// exports.create = async (data) => {
+//   const { leadId, date } = data;
+//   if (!leadId || !date) throw new Error('leadId and date required');
+//   const ap = await AppointmentModel.create(data);
+//   // if appointment is today or future, optionally notify
+//   await automationLog.create({ type: 'appointment_created', leadId, message: `Appointment created for ${date}` });
+//   // if configured, send an email here
+//   try {
+//     const lead = await LeadModel.findById(leadId);
+//     if (lead && lead.email) {
+//       await emailService.sendSimpleEmail(lead.email, 'Appointment Created', `Your appointment is scheduled on ${new Date(date).toLocaleString()}`);
+//     }
+//   } catch (e) { /* swallow */ }
+//   return ap;
+// };
+
 exports.create = async (data) => {
   const { leadId, date } = data;
-  if (!leadId || !date) throw new Error('leadId and date required');
-  const ap = await AppointmentModel.create(data);
-  // if appointment is today or future, optionally notify
-  await automationLog.create({ type: 'appointment_created', leadId, message: `Appointment created for ${date}` });
-  // if configured, send an email here
+
+  if (!leadId || !date) {
+    throw new Error("leadId and date required");
+  }
+
+  const appointment = await AppointmentModel.create(data);
+
+  // Log creation
+  await automationLog.create({
+    type: "appointment_created",
+    leadId,
+    message: `Appointment created for ${date}`
+  });
+
   try {
     const lead = await LeadModel.findById(leadId);
+
     if (lead && lead.email) {
-      await emailService.sendSimpleEmail(lead.email, 'Appointment Created', `Your appointment is scheduled on ${new Date(date).toLocaleString()}`);
+      const formatted = new Date(date).toLocaleString();
+
+      // OPTION A — Simple text email
+      // await emailService.sendSimpleEmail(
+      //   lead.email,
+      //   "Appointment Scheduled",
+      //   `Your appointment is scheduled on ${formatted}.`
+      // );
+
+      // OPTION B — Send beautiful HTML email (recommended)
+      await emailService.send(
+        lead.email,
+        "Appointment Scheduled",
+        `
+          <h2>Your Appointment is Confirmed</h2>
+          <p>Dear ${lead.name || "User"},</p>
+          <p>Your appointment is scheduled on:</p>
+          <p><strong>${formatted}</strong></p>
+          <p>We look forward to assisting you.</p>
+          <br/>
+          <p>Regards,<br/>CRM Team</p>
+        `
+      );
+
+      // OPTION C — Send using stored template (if you create one)
+      // emailService.sendTemplate("appointment_created", lead.email, {
+      //   name: lead.name,
+      //   date: formatted
+      // });
     }
-  } catch (e) { /* swallow */ }
-  return ap;
+  } catch (e) {
+    // swallow errors so appointment creation does not break
+    console.log("Email send failed:", e.message);
+  }
+
+  return appointment;
 };
+
 
 exports.getCurrent = async (leadId) => {
   const now = new Date();

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const EmailTemplate = require('../models/emailTemplate.model');
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -22,6 +23,10 @@ exports.send = async (to, subject, html) => {
 };
 
 exports.sendSimpleEmail = async (to, subject, text) => {
+  console.log("subject=======",subject)
+  console.log("to=======",to)
+  console.log("text=======",text)
+  console.log("transporter=======",transporter)
   const info = await transporter.sendMail({ from: process.env.FROM_EMAIL, to, subject, text });
   return info;
 };
