@@ -52,18 +52,13 @@ app.use("/api/report", reportRoutes);
 app.get("/api/health", (req, res) => res.success("ok", { time: new Date() }));
 
 
-if (!process.env.VERCEL) {
-  connectDB(process.env.MONGO_URI)
-    .then(() => {
-      app.listen(PORT, () =>
-        console.log(`Server running on port ${PORT}`)
-      );
-    })
-    .catch((err) => {
-      console.error("DB failed", err);
-      process.exit(1);
-    });
-}
+app.use(errorHandler);
+
+connectDB();
+
+
+app.listen(PORT, () => {  
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
-

@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const cronJobs = require('../../src/utils/cronJobs');
 
-const connectDB = async (uri) => {
+
+require("dotenv").config();
+const connectDB = async () => {
   console.log("connectDB===")
   console.log("connectDB===")
-  if (!uri) throw new Error('MONGO_URI is required');
+  if (!process.env.MONGO_URI) throw new Error('MONGO_URI is required');
   console.log("connectDB222222===")
-  await mongoose.connect(uri, {
+  await mongoose.connect(process.env.MONGO_URI, {
     // options are defaults in mongoose 7+
   });
 
