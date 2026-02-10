@@ -20,6 +20,15 @@ app.use(
   })
 );
 
+app.get("/", function (_, res) {
+  res.statusCode = 200;
+  res.json({ status: "success", message: "Parcel Pending API", data: {} });
+});
+
+
+
+app.use(express.json());
+app.use(morgan("dev"));
 
 (async () => {
   try {
@@ -44,13 +53,7 @@ app.use(
 //   console.log(`Server running on port ${PORT}`);
 // });
 
-app.use(express.json());
-app.use(morgan("dev"));
 
-app.get("/", function (_, res) {
-  res.statusCode = 200;
-  res.json({ status: "success", message: "Parcel Pending API", data: {} });
-});
 
 // attach a helper for consistent responses
 app.use((req, res, next) => {
